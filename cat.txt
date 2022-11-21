@@ -17,7 +17,7 @@ local httpservice = game:GetService("HttpService")
 
 local player = players.LocalPlayer
 local mouse = player:GetMouse()
-local camera = game.Workspace.CurrentCamera
+local camera = workspace.CurrentCamera
 
 library.theme = {
     fontsize = 15,
@@ -3399,6 +3399,7 @@ function library:CreateWindow(name, size, hidebutton)
         end
 
         function tab:CreateConfigSystem(side)
+	pcall(function()
             local configSystem = { }
 
             configSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId)
@@ -3447,9 +3448,11 @@ function library:CreateWindow(name, size, hidebutton)
                         end
                     end
                 end
+		end)
             end)
 
             configSystem.Save = configSystem.sector:AddButton("Save", function()
+	    pcall(function()
                 local config = {}
                 if Config:Get() and Config:Get() ~= "" then
                     for i,v in pairs(library.flags) do
@@ -3468,9 +3471,11 @@ function library:CreateWindow(name, size, hidebutton)
     
                     writefile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt", httpservice:JSONEncode(config))
                 end
+		end)
             end)
 
             configSystem.Load = configSystem.sector:AddButton("Load", function()
+	    	pcall(function()
                 local Success = pcall(readfile, configSystem.configFolder .. "/" .. Config:Get() .. ".txt")
                 if (Success) then
                     pcall(function() 
@@ -3506,6 +3511,7 @@ function library:CreateWindow(name, size, hidebutton)
                         end
                     end)
                 end
+		end)
             end)
 
             configSystem.Delete = configSystem.sector:AddButton("Delete", function()
